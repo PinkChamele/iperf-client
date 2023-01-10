@@ -1,20 +1,12 @@
-import subprocess
 import json
 import math
 
-server_ip = "127.0.0.1"
-
-def client(server_ip):
-    iperf_process = subprocess.Popen(["iperf3", "-c", server_ip, "-J"], stdout=subprocess.PIPE)
-
-    return iperf_process.stdout
-
-def parser(output):
+def parse(output):
     parsed_output = []
     decoded_json = output.read().decode("utf-8")
     parsed_json = json.loads(decoded_json)
 
-    if parsed_json["error"]:
+    if parsed_json.get("error", None):
       raise Exception(parsed_json["error"])
 
     for interval in parsed_json["intervals"]:
@@ -32,9 +24,3 @@ def parser(output):
         })
 
     return parsed_output
-
-client_output = client(server_ip)
-parsed_output = parser(client_output)
-
-for line in parsed_output:
-  print(f"{line}\n")
