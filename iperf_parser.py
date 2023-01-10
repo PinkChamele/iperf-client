@@ -10,11 +10,10 @@ def parse(output):
       raise Exception(parsed_json["error"])
 
     for interval in parsed_json["intervals"]:
-      p = math.pow(1024, 3)
       start = round(interval["sum"]["start"], 2)
       end = round(interval["sum"]["end"], 2)
-      transfer = round(interval["sum"]["bytes"] / p, 2)
-      bitrate = round(interval["sum"]["bits_per_second"] / p, 2)
+      transfer = round(interval["sum"]["bytes"] / math.pow(1024, 3), 2)
+      bitrate = round(interval["sum"]["bits_per_second"] / math.pow(1000, 3), 2)
 
       if transfer > 2 and bitrate > 20:
         parsed_output.append({
